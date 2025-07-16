@@ -7,6 +7,7 @@ const cardsContainer = document.querySelector('.cards');
 const titleInput = document.getElementById('title');
 const contentInput = document.getElementById('content');
 const id = crypto.randomUUID();
+const searchInput = document.getElementById('search-bar');
 
 
 sidebarToggle.addEventListener('click', () => {
@@ -21,6 +22,12 @@ sidebarToggle.addEventListener('click', () => {
 
     }
 });
+
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    renderNotes(query);
+})
+
 
 addNote.addEventListener('click', () => {
     const isHidden = window.getComputedStyle(noteForm).display === 'none';
@@ -81,23 +88,25 @@ submitBtn.addEventListener('click', () => {
     noteform.style.display = 'none';
 })
 
-function renderNotes() {
+function renderNotes(query = '') {
     cardsContainer.innerHTML = '';
     
-    notes.forEach((note) => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <span style="font-size: 12px; color: #7a5cff;">Note</span>
-            <h3>${note.title}</h3>
-            <p>${note.content}</p>
-            <div class="card-footer">
-                <span>📓</span>
-                <span>${note.date}</span>
-            </div>
-            <button class="delete-btn" data-id="${note.id}" style="margin-top: 10px;">Delete</button>
-            <button class="edit-btn" data-id="${note.id}" style=margin-top: 10px;">Edit</button>
-        `;
+    notes
+        .filter(note => note.title.toLowerCase().includes(query) || note.content.toLowerCase().includes(query))
+        .forEach((note) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <span style="font-size: 12px; color: #7a5cff;">Note</span>
+                <h3>${note.title}</h3>
+                <p>${note.content}</p>
+                <div class="card-footer">
+                    <span>📓</span>
+                    <span>${note.date}</span>
+                </div>
+                <button class="delete-btn" data-id="${note.id}" style="margin-top: 10px;">Delete</button>
+                <button class="edit-btn" data-id="${note.id}" style=margin-top: 10px;">Edit</button>
+            `;
 
         cardsContainer.append(card);
 

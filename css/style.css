@@ -13,6 +13,7 @@ body {
 
 .container {
     display: flex;
+    height: 100%;
 }
 
 /* Navigation bar */
@@ -21,11 +22,10 @@ body {
     display: flex;
     flex-direction: column;
     background: black;
-    height: 100vh;
+    height: 100%;
     width: 200px;
     color: #d3d3d3;
     padding: 30px 10px;
-
 }
 
 .sidebar a {
@@ -61,7 +61,12 @@ body {
 .headers {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.headers #search-bar {
+    background: black;;
+    color: #d3d3d3;
 }
 
 #add-notes-button {
@@ -103,7 +108,7 @@ body {
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
 
@@ -120,6 +125,7 @@ body {
     background: black;
     padding: 20px;
     border-radius: 10px;
+    max-width: 300px;
 }
 
 .card-footer {
@@ -128,4 +134,30 @@ body {
     margin-top: 15px;
     font-size: 12px;
     color: #888;
+}
+
+@media (max-width: 850px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 650px) {
+    .cards {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .headers{
+        flex-direction: column;
+        gap: 20px;
+
+    }
+
+    .headers #search-bar,
+    .headers > h2{
+        width: 250px;
+        height: 50px;
+        margin: 0 auto;
+        text-align: center;
+    }
 }
