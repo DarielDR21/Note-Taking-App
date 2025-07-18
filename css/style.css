@@ -1,5 +1,8 @@
 * {
+    /* border-box makes it so when adding padding to an element, the width of the element does not increase */
     box-sizing: border-box;
+
+    /* This is called a reset, not necessary but useful to avoid funny surprises */
     margin: 0;
     padding: 0;
 }
@@ -12,6 +15,7 @@ body {
 }
 
 .container {
+    /* Made the container flex to have the sidebar and the main content side to side */
     display: flex;
     height: 100%;
 }
@@ -51,6 +55,7 @@ body {
 
 /* Main */
 .main {
+    /* Flex 1 means grow and take up any extra space in the flex container */
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -107,6 +112,7 @@ body {
 }
 
 .cards {
+    /* I just wanted 3 notes per row so I decided to use grid with 3 columns */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
@@ -136,23 +142,32 @@ body {
     color: #888;
 }
 
+/* This is screen width is less than 850px, I want two columns in the layout */
+
 @media (max-width: 850px) {
     .cards {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
+
+/* If the width is less than 650px, I want only 1 column in the layout and I want to headers on top of one another */
 @media (max-width: 650px) {
     .cards {
         grid-template-columns: repeat(1, 1fr);
+        justify-items: center;
+    }
+    /* Keep the original size of the card */
+    .card {
+        width: 100%;
     }
 
     .headers{
         flex-direction: column;
         gap: 20px;
-
     }
 
+    /* I want my search bar and h2 centered */
     .headers #search-bar,
     .headers > h2{
         width: 250px;

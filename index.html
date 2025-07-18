@@ -8,16 +8,15 @@
 </head>
 
 <body>
+    <!-- Main container -->
     <div class="container">
 
         <header>
             <div id="sidebar-toggle"><</div>
             <nav class="sidebar">
                 <h2>My Navigation</h2>
-                <a href="#">Home</a>
-                <a href="#">My Tasks</a>
-                <a href="#">Projects</a>
-                <a href="#">Notes</a>
+                <a href="#" id="home-link">Home</a>
+                <a href="#" id="favorites-link">My Favorites</a>
             </nav>
         </header>
 
@@ -28,15 +27,18 @@
                     <input type="text" id="search-bar" placeholder = "Search notes...">
                     <button id="add-notes-button">+ Add Notes</button>
                 </div>
-
+                
+                <!-- This form is hidden and displayed when the user wants to add a note -->
                 <form id="note-form">
                     <input type="text" id="title" placeholder="Title">
                     <textarea id="content" placeholder="Content"></textarea>
                     <button id="submit-button">Add Note</button>
                 </form>
 
+                <!-- Cards container -->
                 <div class="cards">
 
+                    <!-- Sample cards to display when using for the first time -->
                     <div class="card">
                         <span>Sample</span>
                         <h3>Review homework feedback</h3>
@@ -62,7 +64,7 @@
         </main>
         
     </div>
-    <!-- End of Container -->
+    <!-- End of main container -->
      <script src="main.js"></script>
 </body>
 </html>
