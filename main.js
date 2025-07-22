@@ -11,6 +11,19 @@ const searchInput = document.getElementById('search-bar');
 const homeLink = document.getElementById('home-link');
 const favoritesLink = document.getElementById('favorites-link');
 
+
+//key to get items from Local Storage
+const key = 'my-notes';
+
+//Array to store the notes
+let notes = [];
+
+// flag to know if we are editing
+let editingNoteId = null;
+
+let currentView = {query : '', showFavorites: false};
+
+
 // if the sidebar toggle is clicked, then we want to toggle the sidebar-hide class on and off to hide it or display it
 sidebarToggle.addEventListener('click', () => {
     sideBar.classList.toggle('sidebar-hide');
@@ -25,27 +38,29 @@ sidebarToggle.addEventListener('click', () => {
         //otherwise, leave the symbol as is and remove the sidebar-toggle-hidden class
         sidebarToggle.textContent = '<'
         sidebarToggle.classList.remove('sidebar-toggle-hidden');
-
     }
 });
 
 // if the search bar is typed on, we want to get that value and send it to renderNotes to filter the notes
 searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase();
-    renderNotes(query);
-})
+    currentView.query = query;
+    renderNotes(currentView.query, currentView.showFavorites);
+});
 
 // if the home link in the sidebar is clicked, we want to display all the notes
 homeLink.addEventListener('click', (event) => {
     event.preventDefault();
-    renderNotes('');
-})
+    currentView = {query: '', showFavorites: false};
+    renderNotes('', false);
+});
 
 // if the favorites link in the sidebar is clicked, we want to display the notes we have favorited
 favoritesLink.addEventListener('click', (event) => {
     event.preventDefault();
-    renderNotes('', true);
-})
+    currentView = {query: '', showFavorites: true};
+    renderNotes(currentView.query, currentView.showFavorites);
+});
 
 // if the add notes button is clicked, we want to display the form to get user input
 addNote.addEventListener('click', () => {
@@ -53,16 +68,8 @@ addNote.addEventListener('click', () => {
     const isHidden = window.getComputedStyle(noteForm).display === 'none';
     // If isHidden is true, then we want to display the form with of a display property of block, otherwise, leave it hidden.
     noteForm.style.display = isHidden ? 'block':'none';
-})
+});
 
-//key to get items from Local Storage
-const key = 'my-notes';
-
-//Array to store the notes
-let notes = [];
-
-// flag to know if we are editing
-let editingNoteId = null;
 
 //Load existing notes from storage 
 window.addEventListener('DOMContentLoaded', () => {
@@ -122,13 +129,14 @@ submitBtn.addEventListener('click', () => {
     contentInput.value = '';
     submitBtn.textContent = 'Add Note';
     noteForm.style.display = 'none';
-})
+});
 
 //renderNotes does a couple of things, 1. render notes based on criteria, 2. renders all notes, and 3. creates a note when the user creates one
 function renderNotes(query = '', showFavorites = false) {
+
+    currentView = {query, showFavorites};
     // clear the sample notes from the layout
     cardsContainer.innerHTML = '';
-    
     // if showFavorites is true and/or whatever the user typed into the search bar matches the title and content of a note, we want to return that
     notes
         .filter(note => {
@@ -149,8 +157,8 @@ function renderNotes(query = '', showFavorites = false) {
                     <span>📓</span>
                     <span>${note.date}</span>
                 </div>
-                <button class="favorite-btn" data-id="${note.id}" style="margin-top: 10px;">
-                    ${note.isFavorite ? '⭑' : '⭒'} Favorite
+                <button class="favorite-btn" data-id="${note.id}" style="margin-top: 10px; background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;">
+                    ${note.isFavorite ? '❤️' : '♡'} 
                 </button>
                 <button class="delete-btn" data-id="${note.id}" style="margin-top: 10px;">Delete</button>
                 <button class="edit-btn" data-id="${note.id}" style="margin-top: 10px;">Edit</button>
@@ -181,7 +189,7 @@ function renderNotes(query = '', showFavorites = false) {
             submitBtn.textContent = editingNoteId ? 'Update Now':'Add Note'
 
         });
-    })
+    });
 };
 
 //this function returns the notes that we have favorited when we click the favorite link on the sidebar
@@ -195,14 +203,13 @@ function toggleFavorite (noteID) {
 
     // then we want to save and display our favorited notes
     saveNotes();
-    renderNotes();
+    renderNotes(currentView.query, currentView.showFavorites);
 }
 
 // saveNotes saves notes to local storage with the specified key
 function saveNotes () {
     localStorage.setItem(key, JSON.stringify(notes));
 }
-
 
 /*
 What is local storage?
